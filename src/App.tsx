@@ -505,16 +505,49 @@ function TodoApp() {
                 )}
               </div>
             ) : (
-              <div className="space-y-2.5">
-                {filteredTasks.map((task) => (
-                  <TaskCard
-                    key={task.id}
-                    task={task}
-                    onToggleComplete={handleToggleComplete}
-                    onDelete={(t) => setDeleteTarget(t)}
-                    onUpdate={handleUpdateTask}
-                  />
-                ))}
+              <div>
+                <div className="space-y-2.5">
+                  {filteredTasks.map((task) => (
+                    <TaskCard
+                      key={task.id}
+                      task={task}
+                      onToggleComplete={handleToggleComplete}
+                      onDelete={(t) => setDeleteTarget(t)}
+                      onUpdate={handleUpdateTask}
+                    />
+                  ))}
+                </div>
+
+                {/* Footer of the task list showing count of remaining incomplete tasks */}
+                <div className="mt-4 pt-3.5 px-3 border-t border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2.5 text-xs text-slate-600 dark:text-slate-400">
+                  <div className="flex items-center gap-2">
+                    <span className="inline-flex items-center justify-center min-w-5 h-5 px-1.5 rounded-md bg-indigo-50 dark:bg-indigo-950/60 border border-indigo-200 dark:border-indigo-800/80 font-bold text-indigo-700 dark:text-indigo-300 font-mono tabular-nums text-xs">
+                      {tasks.filter((t) => !t.completed).length}
+                    </span>
+                    <span className="font-medium text-slate-700 dark:text-slate-300">
+                      {tasks.filter((t) => !t.completed).length === 1 ? 'task remaining' : 'tasks remaining'}
+                    </span>
+                    {tasks.filter((t) => !t.completed).length === 0 && tasks.length > 0 && (
+                      <span className="text-emerald-600 dark:text-emerald-400 font-medium">
+                        · All caught up! 🎉
+                      </span>
+                    )}
+                  </div>
+
+                  <div className="flex items-center gap-3 text-[11px] text-slate-500 dark:text-slate-400">
+                    <span>
+                      Total: <strong className="font-mono tabular-nums text-slate-700 dark:text-slate-300">{tasks.length}</strong>
+                    </span>
+                    {tasks.some((t) => t.completed) && (
+                      <button
+                        onClick={handleClearCompleted}
+                        className="text-rose-600 dark:text-rose-400 hover:text-rose-700 dark:hover:text-rose-300 hover:underline cursor-pointer transition font-medium"
+                      >
+                        Clear completed
+                      </button>
+                    )}
+                  </div>
+                </div>
               </div>
             )}
           </div>
