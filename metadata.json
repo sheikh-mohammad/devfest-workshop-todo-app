@@ -2,5 +2,7 @@
   "name": "SyncTasks - Collaborative Cloud To-Do",
   "description": "A secure, real-time collaborative to-do application powered by Firebase Firestore with Google Sign-In and private user task isolation.",
   "requestFramePermissions": [],
-  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
 }

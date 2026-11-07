@@ -4,16 +4,9 @@ import confetti from 'canvas-confetti';
 import {
   Check,
   Calendar,
-  Clock,
   Trash2,
   Edit3,
-  CheckCircle2,
-  AlertTriangle,
-  Tag,
   Save,
-  X,
-  Flame,
-  AlertCircle,
 } from 'lucide-react';
 
 interface TaskCardProps {
@@ -38,22 +31,22 @@ const PRIORITY_BADGES: Record<
 > = {
   urgent: {
     label: 'Urgent',
-    badgeClass: 'bg-rose-950/60 border-rose-800/80 text-rose-300 ring-1 ring-rose-500/30',
+    badgeClass: 'bg-rose-50 dark:bg-rose-950/60 border-rose-200 dark:border-rose-800/80 text-rose-700 dark:text-rose-300 ring-1 ring-rose-500/20',
     dotClass: 'bg-rose-500 animate-pulse',
   },
   high: {
     label: 'High',
-    badgeClass: 'bg-amber-950/60 border-amber-800/80 text-amber-300',
+    badgeClass: 'bg-amber-50 dark:bg-amber-950/60 border-amber-200 dark:border-amber-800/80 text-amber-700 dark:text-amber-300',
     dotClass: 'bg-amber-500',
   },
   medium: {
     label: 'Medium',
-    badgeClass: 'bg-sky-950/60 border-sky-800/80 text-sky-300',
+    badgeClass: 'bg-sky-50 dark:bg-sky-950/60 border-sky-200 dark:border-sky-800/80 text-sky-700 dark:text-sky-300',
     dotClass: 'bg-sky-500',
   },
   low: {
     label: 'Low',
-    badgeClass: 'bg-slate-800/60 border-slate-700/80 text-slate-300',
+    badgeClass: 'bg-slate-100 dark:bg-slate-800/60 border-slate-200 dark:border-slate-700/80 text-slate-700 dark:text-slate-300',
     dotClass: 'bg-slate-400',
   },
 };
@@ -88,9 +81,8 @@ export const TaskCard: React.FC<TaskCardProps> = ({
     setIsToggling(true);
     try {
       if (!task.completed) {
-        // Micro-celebration confetti explosion
         confetti({
-          particleCount: 45,
+          particleCount: 40,
           spread: 60,
           origin: { y: 0.8 },
           colors: ['#6366f1', '#10b981', '#38bdf8', '#fbbf24'],
@@ -130,7 +122,6 @@ export const TaskCard: React.FC<TaskCardProps> = ({
     setIsEditing(false);
   };
 
-  // Due date relative calculation
   const getDueDateLabel = (dueDateStr?: string) => {
     if (!dueDateStr) return null;
     const today = new Date();
@@ -140,7 +131,7 @@ export const TaskCard: React.FC<TaskCardProps> = ({
     const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24));
 
     if (diffDays < 0) {
-      return { label: `Overdue by ${Math.abs(diffDays)}d`, isOverdue: true };
+      return { label: `Overdue (${Math.abs(diffDays)}d)`, isOverdue: true };
     }
     if (diffDays === 0) {
       return { label: 'Due Today', isToday: true };
@@ -148,7 +139,7 @@ export const TaskCard: React.FC<TaskCardProps> = ({
     if (diffDays === 1) {
       return { label: 'Due Tomorrow', isSoon: true };
     }
-    return { label: `Due in ${diffDays}d (${dueDateStr})`, isFuture: true };
+    return { label: `Due in ${diffDays}d`, isFuture: true };
   };
 
   const dueDateInfo = getDueDateLabel(task.dueDate);
@@ -156,14 +147,14 @@ export const TaskCard: React.FC<TaskCardProps> = ({
 
   if (isEditing) {
     return (
-      <div className="bg-slate-900 border border-indigo-500/50 rounded-2xl p-4 shadow-lg ring-1 ring-indigo-500/30 transition-all">
+      <div className="bg-white dark:bg-slate-900 border border-indigo-400 dark:border-indigo-500/50 rounded-2xl p-4 shadow-md ring-1 ring-indigo-400/30 transition-all">
         <div className="space-y-3">
           <input
             type="text"
             value={editTitle}
             onChange={(e) => setEditTitle(e.target.value)}
             maxLength={200}
-            className="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-sm text-slate-100 focus:outline-none focus:border-indigo-500"
+            className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:border-indigo-500"
             placeholder="Task title..."
           />
           <textarea
@@ -171,7 +162,7 @@ export const TaskCard: React.FC<TaskCardProps> = ({
             onChange={(e) => setEditDesc(e.target.value)}
             maxLength={1000}
             rows={2}
-            className="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-indigo-500 resize-none"
+            className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-900 dark:text-slate-200 focus:outline-none focus:border-indigo-500 resize-none"
             placeholder="Add notes / details..."
           />
 
@@ -179,7 +170,7 @@ export const TaskCard: React.FC<TaskCardProps> = ({
             <select
               value={editPriority}
               onChange={(e) => setEditPriority(e.target.value as TaskPriority)}
-              className="bg-slate-950 border border-slate-700 text-xs rounded-xl px-2.5 py-1.5 text-slate-200"
+              className="bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 text-xs rounded-xl px-2.5 py-1.5 text-slate-900 dark:text-slate-200"
             >
               <option value="low">Low Priority</option>
               <option value="medium">Medium Priority</option>
@@ -190,7 +181,7 @@ export const TaskCard: React.FC<TaskCardProps> = ({
             <select
               value={editCategory}
               onChange={(e) => setEditCategory(e.target.value as TaskCategory)}
-              className="bg-slate-950 border border-slate-700 text-xs rounded-xl px-2.5 py-1.5 text-slate-200"
+              className="bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 text-xs rounded-xl px-2.5 py-1.5 text-slate-900 dark:text-slate-200"
             >
               {Object.entries(CATEGORY_NAMES).map(([key, name]) => (
                 <option key={key} value={key}>
@@ -203,24 +194,24 @@ export const TaskCard: React.FC<TaskCardProps> = ({
               type="date"
               value={editDueDate}
               onChange={(e) => setEditDueDate(e.target.value)}
-              className="bg-slate-950 border border-slate-700 text-xs rounded-xl px-2.5 py-1.5 text-slate-200 [color-scheme:dark]"
+              className="bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 text-xs rounded-xl px-2.5 py-1.5 text-slate-900 dark:text-slate-200"
             />
           </div>
 
-          <div className="flex items-center justify-end gap-2 pt-2 border-t border-slate-800">
+          <div className="flex items-center justify-end gap-2 pt-2 border-t border-slate-200 dark:border-slate-800">
             <button
               onClick={handleCancelEdit}
-              className="px-3 py-1.5 text-xs text-slate-400 hover:text-slate-200 bg-slate-800 rounded-lg cursor-pointer"
+              className="px-3 py-1.5 text-xs text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 bg-slate-100 dark:bg-slate-800 rounded-lg cursor-pointer"
             >
               Cancel
             </button>
             <button
               onClick={handleSaveEdit}
               disabled={isSaving || !editTitle.trim()}
-              className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-500 rounded-lg transition disabled:opacity-50 cursor-pointer"
+              className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-500 rounded-lg transition disabled:opacity-50 cursor-pointer shadow-xs"
             >
               <Save className="w-3.5 h-3.5" />
-              <span>{isSaving ? 'Saving...' : 'Save Changes'}</span>
+              <span>{isSaving ? 'Saving...' : 'Save'}</span>
             </button>
           </div>
         </div>
@@ -230,10 +221,10 @@ export const TaskCard: React.FC<TaskCardProps> = ({
 
   return (
     <div
-      className={`group relative bg-slate-900/70 hover:bg-slate-900 border rounded-2xl p-4 transition-all duration-200 shadow-sm ${
+      className={`group relative bg-white dark:bg-slate-900/70 hover:bg-slate-50/80 dark:hover:bg-slate-900 border rounded-2xl p-4 transition-all duration-150 shadow-xs ${
         task.completed
-          ? 'border-slate-800/60 opacity-75 bg-slate-950/40'
-          : 'border-slate-800 hover:border-slate-700 hover:shadow-md'
+          ? 'border-slate-200/70 dark:border-slate-800/60 bg-slate-50/50 dark:bg-slate-950/40 opacity-75'
+          : 'border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700'
       }`}
     >
       <div className="flex items-start gap-3.5">
@@ -244,10 +235,10 @@ export const TaskCard: React.FC<TaskCardProps> = ({
           disabled={isToggling}
           className={`mt-0.5 shrink-0 w-6 h-6 rounded-lg border flex items-center justify-center transition-all cursor-pointer ${
             task.completed
-              ? 'bg-emerald-600 border-emerald-500 text-white shadow-sm shadow-emerald-600/30'
-              : 'border-slate-700 hover:border-indigo-400 bg-slate-950/60 hover:bg-indigo-950/20'
+              ? 'bg-emerald-600 border-emerald-500 text-white shadow-xs'
+              : 'border-slate-300 dark:border-slate-700 hover:border-indigo-500 bg-white dark:bg-slate-950/60 hover:bg-indigo-50 dark:hover:bg-indigo-950/20'
           }`}
-          title={task.completed ? 'Mark as incomplete' : 'Mark as completed'}
+          title={task.completed ? 'Mark incomplete' : 'Mark complete'}
         >
           {task.completed && <Check className="w-3.5 h-3.5 stroke-[3]" />}
         </button>
@@ -256,19 +247,21 @@ export const TaskCard: React.FC<TaskCardProps> = ({
         <div className="flex-1 min-w-0">
           <div className="flex items-start justify-between gap-3">
             <h3
-              className={`text-sm font-medium leading-snug break-words transition-all ${
-                task.completed ? 'line-through text-slate-500' : 'text-slate-100 font-medium'
+              className={`text-sm leading-snug break-words transition-all ${
+                task.completed
+                  ? 'line-through text-slate-400 dark:text-slate-500'
+                  : 'text-slate-900 dark:text-slate-100 font-semibold'
               }`}
             >
               {task.title}
             </h3>
 
-            {/* Quick Actions (visible on hover) */}
+            {/* Quick Actions */}
             <div className="flex items-center gap-1 shrink-0 opacity-80 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
               <button
                 type="button"
                 onClick={() => setIsEditing(true)}
-                className="p-1.5 text-slate-400 hover:text-indigo-400 hover:bg-slate-800 rounded-lg transition cursor-pointer"
+                className="p-1.5 text-slate-500 dark:text-slate-400 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition cursor-pointer"
                 title="Edit task"
               >
                 <Edit3 className="w-3.5 h-3.5" />
@@ -276,7 +269,7 @@ export const TaskCard: React.FC<TaskCardProps> = ({
               <button
                 type="button"
                 onClick={() => onDelete(task)}
-                className="p-1.5 text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 rounded-lg transition cursor-pointer"
+                className="p-1.5 text-slate-500 dark:text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-500/10 rounded-lg transition cursor-pointer"
                 title="Delete task"
               >
                 <Trash2 className="w-3.5 h-3.5" />
@@ -288,7 +281,7 @@ export const TaskCard: React.FC<TaskCardProps> = ({
           {task.description && (
             <p
               className={`text-xs mt-1.5 line-clamp-2 leading-relaxed ${
-                task.completed ? 'text-slate-600 line-through' : 'text-slate-400'
+                task.completed ? 'text-slate-400 dark:text-slate-600 line-through' : 'text-slate-600 dark:text-slate-400'
               }`}
             >
               {task.description}
@@ -296,7 +289,7 @@ export const TaskCard: React.FC<TaskCardProps> = ({
           )}
 
           {/* Metadata badges row */}
-          <div className="flex flex-wrap items-center gap-2 mt-3 pt-2.5 border-t border-slate-800/60 text-[11px]">
+          <div className="flex flex-wrap items-center gap-2 mt-3 pt-2.5 border-t border-slate-100 dark:border-slate-800/60 text-[11px]">
             {/* Priority Badge */}
             <span
               className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md border font-medium ${priorityConfig.badgeClass}`}
@@ -307,7 +300,7 @@ export const TaskCard: React.FC<TaskCardProps> = ({
 
             {/* Category Badge */}
             {task.category && (
-              <span className="inline-flex items-center gap-1 text-slate-400 bg-slate-950/60 border border-slate-800 px-2 py-0.5 rounded-md">
+              <span className="inline-flex items-center gap-1 text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 px-2 py-0.5 rounded-md">
                 {CATEGORY_NAMES[task.category] || task.category}
               </span>
             )}
@@ -315,12 +308,12 @@ export const TaskCard: React.FC<TaskCardProps> = ({
             {/* Due Date Indicator */}
             {dueDateInfo && (
               <span
-                className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-md border ${
+                className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-md border font-mono tabular-nums ${
                   dueDateInfo.isOverdue
-                    ? 'bg-rose-950/50 border-rose-800/80 text-rose-300 font-semibold'
+                    ? 'bg-rose-50 dark:bg-rose-950/50 border-rose-200 dark:border-rose-800/80 text-rose-700 dark:text-rose-300 font-semibold'
                     : dueDateInfo.isToday
-                    ? 'bg-amber-950/50 border-amber-800/80 text-amber-300 font-medium'
-                    : 'bg-slate-950/60 border-slate-800 text-slate-400'
+                    ? 'bg-amber-50 dark:bg-amber-950/50 border-amber-200 dark:border-amber-800/80 text-amber-700 dark:text-amber-300 font-medium'
+                    : 'bg-slate-100 dark:bg-slate-950/60 border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400'
                 }`}
               >
                 <Calendar className="w-3 h-3" />
