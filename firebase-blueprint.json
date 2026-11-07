@@ -1,0 +1,114 @@
+{
+  "entities": {
+    "Task": {
+      "title": "Task",
+      "description": "A user's personal to-do item",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique task identifier"
+        },
+        "ownerId": {
+          "type": "string",
+          "description": "Firebase Auth UID of the task owner"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200,
+          "description": "Summary or title of the task"
+        },
+        "description": {
+          "type": "string",
+          "maxLength": 1000,
+          "description": "Optional notes or details"
+        },
+        "completed": {
+          "type": "boolean",
+          "description": "Completion toggle state"
+        },
+        "priority": {
+          "type": "string",
+          "enum": ["low", "medium", "high", "urgent"],
+          "description": "Task urgency / priority level"
+        },
+        "category": {
+          "type": "string",
+          "enum": ["work", "personal", "shopping", "health", "learning", "finance", "other"],
+          "description": "Category or label"
+        },
+        "dueDate": {
+          "type": "string",
+          "maxLength": 50,
+          "description": "Optional ISO due date string"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server creation timestamp"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server last updated timestamp"
+        }
+      },
+      "required": [
+        "ownerId",
+        "title",
+        "completed",
+        "priority",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "Public profile info for active authenticated team members",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "description": "Firebase Auth UID"
+        },
+        "displayName": {
+          "type": "string",
+          "maxLength": 100,
+          "description": "User display name"
+        },
+        "email": {
+          "type": "string",
+          "maxLength": 200,
+          "description": "User email address"
+        },
+        "photoURL": {
+          "type": "string",
+          "maxLength": 500,
+          "description": "Avatar photo URL"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Last presence ping timestamp"
+        }
+      },
+      "required": [
+        "uid",
+        "displayName",
+        "email",
+        "updatedAt"
+      ]
+    }
+  },
+  "firestore": {
+    "/tasks/{taskId}": {
+      "schema": "#/entities/Task",
+      "description": "User personal tasks strictly isolated so users can only view, create, toggle, and delete their own records"
+    },
+    "/users/{userId}": {
+      "schema": "#/entities/UserProfile",
+      "description": "User presence profile showing active status to fellow authenticated team members"
+    }
+  }
+}
